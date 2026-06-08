@@ -1,9 +1,11 @@
 const API_URL = "/api/products";
 
+/* =========================
+   LISTAR PRODUTOS (READ)
+========================= */
 async function loadProducts() {
 
     const response = await fetch(API_URL);
-
     const products = await response.json();
 
     const container = document.getElementById("products");
@@ -31,6 +33,22 @@ async function loadProducts() {
                             R$ ${product.price}
                         </h4>
 
+                        <div class="d-flex gap-2 mt-3">
+
+                            <button
+                                class="btn btn-warning btn-sm"
+                                onclick="editProduct(${product.id})">
+                                Editar
+                            </button>
+
+                            <button
+                                class="btn btn-danger btn-sm"
+                                onclick="deleteProduct(${product.id})">
+                                Excluir
+                            </button>
+
+                        </div>
+
                     </div>
 
                 </div>
@@ -40,6 +58,9 @@ async function loadProducts() {
     });
 }
 
+/* =========================
+   CREATE (CADASTRAR)
+========================= */
 document
 .getElementById("productForm")
 .addEventListener("submit", async (event) => {
@@ -65,13 +86,54 @@ document
     loadProducts();
 });
 
-loadProducts();
-
+/* =========================
+   DELETE (EXCLUIR)
+========================= */
 async function deleteProduct(id) {
 
-    await fetch(`/api/products/${id}`, {
+    const confirmDelete = confirm("Deseja realmente excluir este produto?");
+
+    if (!confirmDelete) return;
+
+    await fetch(`${API_URL}/${id}`, {
         method: "DELETE"
     });
 
     loadProducts();
 }
+
+/* =========================
+   UPDATE (EDITAR)
+========================= */
+async function editProduct(id) {
+
+    const newName = prompt("Novo nome do produto:");
+    if (!newName) return;
+
+    const newCategory = prompt("Nova categoria:");
+    if (!newCategory) return;
+
+    const newPrice = prompt("Novo preço:");
+    if (!newPrice) return;
+
+    const updatedProduct = {
+        name: newName,
+        category: newCategory,
+        price: parseFloat(newPrice)
+    };
+
+    await fetch(`${API_URL}/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(updatedProduct)
+    });
+
+    loadProducts();
+}
+
+/* =========================
+   INIT
+========================= */
+loadProducts();
