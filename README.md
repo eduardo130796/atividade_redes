@@ -42,10 +42,8 @@ Frontend  FastAPI
 
 ---
 
-## Estrutura do Projeto
-
-```text
-catalogo-produtos/
+### Estrutura do Projeto
+atividade_redes/
 │
 ├── backend/
 │   ├── main.py
@@ -70,7 +68,6 @@ catalogo-produtos/
 ├── docker-compose.yml
 │
 └── README.md
-```
 
 ---
 
@@ -90,7 +87,7 @@ catalogo-produtos/
 
 ## Requisitos
 
-Antes de executar o projeto, é necessário possuir:
+Antes de executar o projeto é necessário possuir:
 
 * Docker
 * Docker Compose
@@ -106,27 +103,31 @@ docker compose version
 
 ## Como Executar
 
-### Clonar o repositório
+### 1. Clonar o repositório
 
 ```bash
 git clone https://github.com/eduardo130796/atividade_redes.git
 ```
 
+### 2. Acessar a pasta do projeto
+
 ```bash
-cd catalogo-produtos
+cd atividade_redes
 ```
 
 ---
 
-### Subir os containers
+### 3. Construir e iniciar os containers
 
 ```bash
 docker compose up --build
 ```
 
+Na primeira execução o MySQL pode levar alguns segundos para concluir sua inicialização.
+
 ---
 
-### Verificar containers
+### 4. Verificar os containers
 
 ```bash
 docker ps
@@ -148,13 +149,13 @@ Containers esperados:
 http://localhost
 ```
 
-### API
+### API REST
 
 ```text
-http://localhost/api/products
+http://localhost:8000/products
 ```
 
-### Swagger
+### Documentação Swagger
 
 ```text
 http://localhost:8000/docs
@@ -238,6 +239,14 @@ Body:
 }
 ```
 
+Resposta:
+
+```json
+{
+  "message": "Produto atualizado"
+}
+```
+
 ---
 
 ### Remover Produto
@@ -270,13 +279,14 @@ Resposta:
 
 ## Fluxo da Aplicação
 
-1. Usuário acessa a aplicação pelo navegador.
-2. Nginx recebe a requisição.
-3. O Front-end é servido pelo Nginx.
-4. Chamadas para `/api` são encaminhadas ao FastAPI.
-5. FastAPI realiza operações no MySQL.
-6. Os dados retornam em formato JSON.
-7. O Front-end atualiza a interface.
+1. O usuário acessa a aplicação pelo navegador.
+2. O Nginx recebe a requisição.
+3. Os arquivos estáticos do Front-end são servidos pelo Nginx.
+4. As chamadas para a API são encaminhadas ao FastAPI.
+5. O FastAPI processa a requisição e realiza operações no MySQL.
+6. O banco retorna os dados ao FastAPI.
+7. O FastAPI responde em formato JSON.
+8. O Front-end atualiza a interface exibida ao usuário.
 
 ---
 
@@ -284,7 +294,7 @@ Resposta:
 
 * Cadastro de produtos
 * Listagem de produtos
-* Consulta individual
+* Consulta individual de produtos
 * Atualização de produtos
 * Exclusão de produtos
 * Interface web responsiva
@@ -294,14 +304,31 @@ Resposta:
 
 ## Análise de Rede
 
-O projeto também contempla análise de tráfego utilizando Wireshark para observação de:
+O projeto contempla análise de tráfego utilizando Wireshark para observação de:
 
-* Requisições HTTP
-* Comunicação entre containers
-* Fluxo entre navegador, Nginx, API e banco de dados
+* Requisições HTTP entre navegador e aplicação
+* Comunicação entre os containers
+* Fluxo de dados entre Nginx, FastAPI e MySQL
+* Respostas da API em formato JSON
+
+---
+
+## Demonstração
+
+A demonstração do projeto apresenta:
+
+* Inicialização da infraestrutura utilizando o comando docker compose up --build
+* Execução dos containers
+* Utilização da API REST
+* Cadastro e listagem de produtos
+* Navegação pela interface web
+* Configuração do Nginx como proxy reverso
+* Captura e análise de tráfego utilizando Wireshark
 
 ---
 
 ## Autor
 
-Projeto desenvolvido para atividade acadêmica de Containers, Redes e Orquestração de Serviços com Docker.
+Eduardo Roquête Cabral Júnior e Vitória Maria de Souza Almeida Gomes
+
+Projeto desenvolvido para atividade acadêmica sobre Containers, Redes e Orquestração de Serviços utilizando Docker Compose, FastAPI, MySQL e Nginx.

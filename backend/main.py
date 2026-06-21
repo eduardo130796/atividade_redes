@@ -1,14 +1,27 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from sqlalchemy.orm import Session
 
 from database import SessionLocal, engine
 from models import Base, Product
-from schemas import ProductCreate
-
-Base.metadata.create_all(bind=engine)
+from schemas import ProductCreate, ProductUpdate
+import time
 
 app = FastAPI(title="Catálogo de Produtos")
 
+@app.on_event("startup")
+def startup():
+
+    tentativas = 30
+
+    while tentativas > 0:
+        try:
+            Base.metadata.create_all(bind=engine)
+            print("Banco conectado com sucesso.")
+            break
+        except Exception as e:
+            print(f"Aguardando banco... {e}")
+            time.sleep(2)
+            tentativas -= 1
 
 @app.post("/products", status_code=201)
 def create_product(product: ProductCreate):

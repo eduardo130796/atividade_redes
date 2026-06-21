@@ -1,16 +1,15 @@
 services:
 
   db:
-
     image: mysql:8.0
-
     container_name: mysql
-
     restart: always
 
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: productsdb
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: apppass
 
     ports:
       - "3306:3306"
@@ -34,8 +33,9 @@ services:
       - "8000:8000"
 
   nginx:
-
-    build: ./nginx
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
 
     container_name: nginx
 
